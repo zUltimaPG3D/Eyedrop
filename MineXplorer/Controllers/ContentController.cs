@@ -46,7 +46,7 @@ public class ContentController : Controller
         
         var map = session.User.LastSpawnData.Split(" ")[0];
         var ghosts = await DatabaseHelper.AllGhostsIn(map);
-        var split = string.Join('\n', ghosts.Select(x => x.ToString()));
+        var split = string.Join('\n', ghosts.Where(x => x.Name != session.User.Username).Select(x => x.ToString()));
         
         return Content(split);
     }
