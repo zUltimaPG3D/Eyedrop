@@ -53,7 +53,7 @@ public class AuthController : Controller
             return ResponseHelper.RequestError();
         }
         
-        var session = SessionManager.CreateOrGetSession(me, false);
+        var session = await SessionManager.CreateOrGetSession(me, false);
         return Content(session == null ? "" : "1");
     }
 }
