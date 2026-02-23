@@ -13,13 +13,9 @@ public class UserController : Controller
     [HttpGet("/m/u/t")]
     public async Task<IActionResult> GetUserTokens()
     {
-        var me = HttpContext.GetHeaderSafe("me");
-        if (me == null)
-        {
-            return StatusCode(404, "Unexpectedly, a crisis.");
-        }
+        var session = (HttpContext.Items["Session"] as Session)!;
         
-        return Content("");
+        return Content(string.Join(' ', session.User.Tokens.Select(x => x.ID)));
     }
     
     [HttpGet("/m/u/s")]
