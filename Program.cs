@@ -22,7 +22,7 @@ internal static class Program
             Console.WriteLine($"{ctx.Request.Method} request to {ctx.Request.GetDisplayUrl()}");
             await next();
         });
-        app.UseMiddleware<UserMiddleware>();
+        app.UseMiddleware<MexpValidityMiddleware>();
         app.UseRouting();
         app.MapControllers();
         app.Run();
