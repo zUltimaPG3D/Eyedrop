@@ -81,6 +81,14 @@ public class ContentController : Controller
         return File(data, "text/plain; charset=us-ascii");
     }
     
+    [HttpGet($"/m/n/n")]
+    public async Task<IActionResult> GetNews()
+    {
+        var path = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "news.txt");
+        var data = await System.IO.File.ReadAllBytesAsync(path);
+        return File(data, "text/plain; charset=us-ascii");
+    }
+    
     [HttpGet($"/m/m/i")]
     public async Task<IActionResult> GetImage()
     {
