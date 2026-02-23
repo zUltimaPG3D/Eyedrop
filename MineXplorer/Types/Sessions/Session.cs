@@ -10,6 +10,7 @@ internal class Session
     public Ghost? Ghost;
     
     private readonly System.Timers.Timer InactivityTimer;
+    private System.Timers.Timer MapChangeTimer;
     
     public Session()
     {
@@ -23,6 +24,27 @@ internal class Session
     {
         InactivityTimer.Stop();
         InactivityTimer.Start();
+    }
+    
+    public void ResetMapTimer()
+    {
+        MapChangeTimer?.Stop();
+        MapChangeTimer?.Dispose();
+    }
+    
+    public void DoMapTimer(string target)
+    {
+        MapChangeTimer?.Dispose();
+        MapChangeTimer = new System.Timers.Timer(TimeSpan.FromMinutes(4));
+        MapChangeTimer.Elapsed += async (_, _) => await ChangeMap(target);
+        MapChangeTimer.AutoReset = false;
+        MapChangeTimer.Enabled = true;
+    }
+    
+    private async Task ChangeMap(string target)
+    {
+        User.LastSpawnData = $"{target} 0 0.9 0 0";
+        await User.UpdateAsync();
     }
     
     private void BecomeInactive(object? source, ElapsedEventArgs e)

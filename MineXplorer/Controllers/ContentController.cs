@@ -31,6 +31,16 @@ public class ContentController : Controller
         session.User.LastSpawnData = $"{map} {spawnData}";
         await session.User.UpdateAsync();
         
+        session.ResetMapTimer();
+        if (map == "map_void" || map == "map_hell" || map == "map_void_white")
+        {
+            session.DoMapTimer("map_welcome");
+        }
+        else if (map == "map_maze")
+        {
+            session.DoMapTimer("map_hell");
+        }
+        
         var path = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "Maps", "2022", map);
         var data = await System.IO.File.ReadAllBytesAsync(path);
         return File(data, "application/octet-stream; charset=binary");
