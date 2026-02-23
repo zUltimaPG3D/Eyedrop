@@ -47,4 +47,22 @@ public class UserController : Controller
         
         return Content("1");
     }
+    
+    [HttpGet("/m/o/t")]
+    public async Task<IActionResult> ObtainToken()
+    {
+        var token = HttpContext.GetHeaderSafe("tk");
+        if (HttpContext.Items["Session"] is not Session session || token == null)
+        {
+            return ResponseHelper.RequestError();
+        }
+        
+        // TODO: add actual checks
+        var legitimate = true;
+        
+        session.User.Tokens.Add(new Token(token, legitimate));
+        await session.User.UpdateAsync();
+        
+        return Content("1");
+    }
 }
