@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using System.Text;
 using Eyedrop.Helpers;
 using Eyedrop.MineXplorer.Helpers;
 using Eyedrop.MineXplorer.Types;
@@ -97,6 +98,34 @@ public class ContentController : Controller
         var random = files[RandomNumberGenerator.GetInt32(files.Length)];
         
         var data = await System.IO.File.ReadAllBytesAsync(random);
+        return File(data, "image/png; charset=binary");
+    }
+    
+    [HttpGet($"/m/m/a")]
+    public async Task<IActionResult> GetAd()
+    {
+        var id = HttpContext.GetHeaderSafe("id");
+        if (id == null)
+        {
+            return ResponseHelper.RequestError();
+        }
+        
+        var listPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "adlist.txt");
+        var listData = (await System.IO.File.ReadAllLinesAsync(listPath)).Where(x => !string.IsNullOrWhiteSpace(x));
+        
+        if (id == "0")
+        {
+            var listString = string.Join('\n', listData);
+            return File(Encoding.UTF8.GetBytes(listString), "text/plain; charset=utf8");
+        }
+        
+        var isValid = listData.Any(x => x == id);
+        if (!isValid) return ResponseHelper.RequestError();
+        
+        var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "Ads", $"{id}.png");
+        if (!System.IO.File.Exists(imagePath)) return ResponseHelper.RequestError();
+        
+        var data = await System.IO.File.ReadAllBytesAsync(imagePath);
         return File(data, "image/png; charset=binary");
     }
 }
