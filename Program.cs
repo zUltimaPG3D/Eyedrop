@@ -1,10 +1,17 @@
 using Eyedrop.MineXplorer.Middlewares;
+using Eyedrop.MineXplorer.Types;
 using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 internal static class Program
 {
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
+        using (var mexpDb = new GameContext())
+        {
+            await mexpDb.Database.MigrateAsync();
+        }
+        
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddControllers();
 
