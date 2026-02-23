@@ -3,6 +3,7 @@ using Eyedrop.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Eyedrop.MineXplorer.Types;
 using Eyedrop.MineXplorer.Types.Sessions;
+using Eyedrop.MineXplorer.Helpers;
 
 namespace Eyedrop.MineXplorer.Controllers;
 
@@ -26,7 +27,7 @@ public class UserController : Controller
     {
         if (HttpContext.Items["Session"] is not Session session)
         {
-            return StatusCode(404, "Unexpectedly, a crisis.");
+            return ResponseHelper.RequestError();
         }
         
         return Content(session.User.LastSpawnData);
@@ -38,7 +39,7 @@ public class UserController : Controller
         var ghostData = HttpContext.GetHeaderSafe("gh");
         if (HttpContext.Items["Session"] is not Session session || ghostData == null)
         {
-            return StatusCode(404, "Unexpectedly, a crisis.");
+            return ResponseHelper.RequestError();
         }
         
         session.CreateGhost();

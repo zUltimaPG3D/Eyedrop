@@ -16,7 +16,7 @@ public class AuthController : Controller
         var me = HttpContext.GetHeaderSafe("me");
         if (me == null || me != "none")
         {
-            return StatusCode(404, "Unexpectedly, a crisis.");
+            return ResponseHelper.RequestError();
         }
         var captcha = CaptchaManager.NewCaptcha();
         var image = await CaptchaImage.CreatePNG(captcha.Solution);
@@ -30,7 +30,7 @@ public class AuthController : Controller
         var userSolution = HttpContext.GetHeaderSafe("ca");
         if (me == null || me != "none" || userSolution == null)
         {
-            return StatusCode(404, "Unexpectedly, a crisis.");
+            return ResponseHelper.RequestError();
         }
         
         
@@ -50,7 +50,7 @@ public class AuthController : Controller
         var version = HttpContext.GetHeaderSafe("vs");
         if (me == null || version != MineXplorerInfo.Version.ToString())
         {
-            return StatusCode(404, "Unexpectedly, a crisis.");
+            return ResponseHelper.RequestError();
         }
         
         var session = SessionManager.CreateOrGetSession(me, false);
