@@ -2,8 +2,8 @@ namespace Eyedrop.MineXplorer.Types;
 
 public class Token
 {
-    public string ID;
-    public bool Legitimate;
+    public string ID { get; set; }
+    public bool Legitimate { get; set; }
     
     public Token(string id)
     {
