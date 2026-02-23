@@ -5,6 +5,8 @@ public class Token
     public string ID { get; set; }
     public bool Legitimate { get; set; }
     
+    public Token() { }
+    
     public Token(string id)
     {
         ID = id;
