@@ -22,7 +22,7 @@ internal class MexpValidityMiddleware
             return;
         }
         
-        var isInDataPath = path == "/m/m/d";
+        var isInDataPath = path == "/m/m/d" || path == "/m/m/a";
         var isInAuthPath = path == "/m/u/v";
         var ignoreMissingSessions = isInDataPath || isInAuthPath || path == "/m/m/c" || path == "/m/u/c";
         
