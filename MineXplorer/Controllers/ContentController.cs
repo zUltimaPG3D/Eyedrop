@@ -78,16 +78,14 @@ public class ContentController : Controller
     public async Task<IActionResult> GetAnnouncement()
     {
         var path = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "announcement.txt");
-        var data = await System.IO.File.ReadAllBytesAsync(path);
-        return File(data, "text/plain; charset=us-ascii");
+        return PhysicalFile(path, "text/plain; charset=utf-8");
     }
     
     [HttpGet($"/m/n/n")]
     public async Task<IActionResult> GetNews()
     {
         var path = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "news.txt");
-        var data = await System.IO.File.ReadAllBytesAsync(path);
-        return File(data, "text/plain; charset=us-ascii");
+        return PhysicalFile(path, "text/plain; charset=utf-8");
     }
     
     [HttpGet($"/m/m/i")]
@@ -96,9 +94,7 @@ public class ContentController : Controller
         var path = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "Images");
         var files = Directory.GetFiles(path);
         var random = files[RandomNumberGenerator.GetInt32(files.Length)];
-        
-        var data = await System.IO.File.ReadAllBytesAsync(random);
-        return File(data, "image/png; charset=binary");
+        return PhysicalFile(random, "image/png; charset=binary");
     }
     
     [HttpGet($"/m/m/a")]
@@ -125,7 +121,6 @@ public class ContentController : Controller
         var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "Ads", $"{id}.png");
         if (!System.IO.File.Exists(imagePath)) return ResponseHelper.RequestError();
         
-        var data = await System.IO.File.ReadAllBytesAsync(imagePath);
-        return File(data, "image/png; charset=binary");
+        return PhysicalFile(imagePath, "image/png; charset=binary");
     }
 }
