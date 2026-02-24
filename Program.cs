@@ -1,3 +1,4 @@
+using Eyedrop.ADU.Types;
 using Eyedrop.MineXplorer.Middlewares;
 using Eyedrop.MineXplorer.Types;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -8,8 +9,10 @@ internal static class Program
     private static async Task Main(string[] args)
     {
         using (var mexpDb = new GameContext())
+        using (var aduDb = new ADUContext())
         {
             await mexpDb.Database.MigrateAsync();
+            await aduDb.Database.MigrateAsync();
         }
         
         var builder = WebApplication.CreateBuilder(args);
