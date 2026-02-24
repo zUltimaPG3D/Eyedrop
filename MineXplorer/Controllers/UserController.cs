@@ -55,8 +55,12 @@ public class UserController : Controller
             return ResponseHelper.RequestError();
         }
         
-        // TODO: add actual checks
+        if (!MineXplorerInfo.AllTokens.Contains(token)) return Content("0");
+        
         var legitimate = true;
+        var userMap = session.User.LastSpawnData.Split(" ")[0];
+        var neededMap = MineXplorerInfo.TokenMap[token];
+        if (userMap != neededMap) legitimate = false;
         
         session.User.Tokens.Add(new Token(token, legitimate));
         await session.User.UpdateAsync();

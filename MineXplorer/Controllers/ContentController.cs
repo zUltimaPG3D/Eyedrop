@@ -26,6 +26,30 @@ public class ContentController : Controller
         {
             return Content("");
         }
+
+        static string GetMapPath(string name)
+        {
+            return Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "Maps", "2022", name);
+        }
+        
+        var checkPath = GetMapPath(map);
+        
+        // validity
+        var wasInMap = session.User.LastSpawnData == $"{map} {spawnData}";
+        var hasMapToken = MineXplorerInfo.TokenRequirements.ContainsKey(map) && session.User.Tokens.Any(x => x.ID == MineXplorerInfo.TokenRequirements[map] && x.Legitimate);
+        var invalid = !hasMapToken && !wasInMap;
+        
+        if (map == "map_void_white" && !wasInMap)
+        {
+            map = "map_hell";
+            spawnData = "0 0.9 0 0";
+        }
+        
+        if (invalid)
+        {
+            map = "map_void";
+            spawnData = "0 0.9 0 0";
+        }
         
         session.User.LastSpawnData = $"{map} {spawnData}";
         await session.User.UpdateAsync();
@@ -40,8 +64,8 @@ public class ContentController : Controller
             session.DoMapTimer("map_hell");
         }
         
-        var path = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "Maps", "2022", map);
-        var data = await System.IO.File.ReadAllBytesAsync(path);
+        var finalPath = GetMapPath(map);
+        var data = await System.IO.File.ReadAllBytesAsync(finalPath);
         return File(data, "application/octet-stream; charset=binary");
     }
     
