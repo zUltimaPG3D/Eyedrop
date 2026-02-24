@@ -30,10 +30,9 @@ public class UserController : Controller
     }
     
     [HttpGet("/m/u/g")]
-    public async Task<IActionResult> UpdateGhost()
+    public async Task<IActionResult> UpdateGhost([FromHeader(Name = "gh")] string ghostData)
     {
-        var ghostData = HttpContext.GetHeaderSafe("gh");
-        if (HttpContext.Items["Session"] is not Session session || ghostData == null)
+        if (HttpContext.Items["Session"] is not Session session)
         {
             return ResponseHelper.RequestError();
         }
@@ -49,10 +48,9 @@ public class UserController : Controller
     }
     
     [HttpGet("/m/o/t")]
-    public async Task<IActionResult> ObtainToken()
+    public async Task<IActionResult> ObtainToken([FromHeader(Name = "tk")] string token)
     {
-        var token = HttpContext.GetHeaderSafe("tk");
-        if (HttpContext.Items["Session"] is not Session session || token == null)
+        if (HttpContext.Items["Session"] is not Session session)
         {
             return ResponseHelper.RequestError();
         }

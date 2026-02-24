@@ -11,28 +11,25 @@ namespace Eyedrop.MineXplorer.Controllers;
 public class AuthController : Controller
 {
     [HttpGet("/m/m/c")]
-    public async Task<IActionResult> CreateCaptcha()
+    public async Task<IActionResult> CreateCaptcha([FromHeader] string me)
     {
-        var me = HttpContext.GetHeaderSafe("me");
-        if (me == null || me != "none")
+        if (me != "none")
         {
             return ResponseHelper.RequestError();
         }
+        
         var captcha = CaptchaManager.NewCaptcha();
         var image = await CaptchaImage.CreatePNG(captcha.Solution);
         return File(image, "image/png; charset=binary");
     }
     
     [HttpGet("/m/u/c")]
-    public async Task<IActionResult> CreateUser()
+    public async Task<IActionResult> CreateUser([FromHeader] string me, [FromHeader(Name = "ca")] string userSolution)
     {
-        var me = HttpContext.GetHeaderSafe("me");
-        var userSolution = HttpContext.GetHeaderSafe("ca");
-        if (me == null || me != "none" || userSolution == null)
+        if (me != "none")
         {
             return ResponseHelper.RequestError();
         }
-        
         
         bool valid = CaptchaManager.CaptchaExists(userSolution);
         if (!valid) return Content("0");
@@ -44,11 +41,9 @@ public class AuthController : Controller
     }
     
     [HttpGet("/m/u/v")]
-    public async Task<IActionResult> ValidateUser()
+    public async Task<IActionResult> ValidateUser([FromHeader] string me, [FromHeader(Name = "vs")] string version)
     {
-        var me = HttpContext.GetHeaderSafe("me");
-        var version = HttpContext.GetHeaderSafe("vs");
-        if (me == null || version != MineXplorerInfo.Version.ToString())
+        if (version != MineXplorerInfo.Version.ToString())
         {
             return ResponseHelper.RequestError();
         }

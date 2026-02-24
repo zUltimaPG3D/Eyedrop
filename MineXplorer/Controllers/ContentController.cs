@@ -20,11 +20,9 @@ public class ContentController : Controller
     }
     
     [HttpGet($"/m/m/m")]
-    public async Task<IActionResult> DownloadMap()
+    public async Task<IActionResult> DownloadMap([FromHeader] string map, [FromHeader(Name = "sd")] string spawnData)
     {
-        var map = HttpContext.GetHeaderSafe("map");
-        var spawnData = HttpContext.GetHeaderSafe("sd");
-        if (HttpContext.Items["Session"] is not Session session || map == null || spawnData == null)
+        if (HttpContext.Items["Session"] is not Session session)
         {
             return Content("");
         }
@@ -65,12 +63,6 @@ public class ContentController : Controller
     [HttpGet($"/m/o/p")]
     public async Task<IActionResult> GetPlayerCount()
     {
-        var me = HttpContext.GetHeaderSafe("me");
-        if (me == null)
-        {
-            return Content("");
-        }
-        
         return Content(SessionManager.PublicSessionCount.ToString());
     }
     
@@ -98,14 +90,8 @@ public class ContentController : Controller
     }
     
     [HttpGet($"/m/m/a")]
-    public async Task<IActionResult> GetAd()
+    public async Task<IActionResult> GetAd([FromHeader] string id)
     {
-        var id = HttpContext.GetHeaderSafe("id");
-        if (id == null)
-        {
-            return ResponseHelper.RequestError();
-        }
-        
         var listPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "adlist.txt");
         var listData = (await System.IO.File.ReadAllLinesAsync(listPath)).Where(x => !string.IsNullOrWhiteSpace(x));
         
