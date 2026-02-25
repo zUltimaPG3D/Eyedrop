@@ -25,6 +25,15 @@ public class User
         }
     }
     
+    [NotMapped]
+    public string LastMap
+    {
+        get
+        {
+            return LastSpawnData.Split(" ")[0];
+        }
+    }
+    
     public async Task UpdateAsync()
     {
         using var db = new GameContext();

@@ -34,9 +34,12 @@ public class ContentController : Controller
         var checkPath = GetMapPath(map);
         
         // validity
-        var wasInMap = session.User.LastSpawnData == $"{map} {spawnData}";
-        var hasMapToken = MineXplorerInfo.TokenRequirements.ContainsKey(map) && session.User.Tokens.Any(x => x.ID == MineXplorerInfo.TokenRequirements[map] && x.Legitimate);
-        var invalid = !hasMapToken && !wasInMap;
+        var wasInMap = session.User.LastMap == map;
+        var requiresTokenForMap = MineXplorerInfo.TokenRequirements.ContainsKey(map);
+        var hasMapToken = requiresTokenForMap && session.User.Tokens.Any(x => x.ID == MineXplorerInfo.TokenRequirements[map] && x.Legitimate);
+        var mapExists = MineXplorerInfo.AllMaps.Contains(map);
+        
+        var invalid = ((requiresTokenForMap && !hasMapToken) || !mapExists) && !wasInMap;
         
         if (map == "map_void_white" && !wasInMap)
         {
