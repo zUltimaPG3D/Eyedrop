@@ -122,7 +122,7 @@ public class ContentController : Controller
         if (id == "0")
         {
             var listString = string.Join('\n', listData);
-            return File(Encoding.UTF8.GetBytes(listString), "text/plain; charset=utf8");
+            return File(Encoding.UTF8.GetBytes(listString), "text/plain; charset=utf-8");
         }
         
         var isValid = listData.Any(x => x == id);
