@@ -37,6 +37,13 @@ internal class GameContext : DbContext
                 v => v.ToString(),
                 v => SpawnData.FromString(v)
             );
+        
+        model.Entity<User>()
+            .Property(u => u.LastPlayed)
+            .HasConversion(
+                v => (ulong)new DateTimeOffset(v).ToUnixTimeSeconds(),
+                v => DateTimeOffset.FromUnixTimeSeconds((long)v).UtcDateTime
+            );
     }
     
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

@@ -40,7 +40,9 @@ public class UserController : Controller
         session.CreateGhost();
         session.Ghost?.Scene = session.User.LastSpawnData.Scene;
         session.Ghost?.Position = Vector4Converter.StringToVec(ghostData);
-        session.User.LastPlayed = (ulong)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        session.User.LastPlayed = DateTime.UtcNow;
+        Console.WriteLine($"{session.User.LastSpawnData.Scene}");
+        Console.WriteLine($"{ghostData}");
         await session.Ghost?.UpdateAsync()!;
         await session.User.UpdateAsync();
         

@@ -10,7 +10,7 @@ public class User
     public string Password { get; set; }
     
     public bool Banned { get; set; }
-    public ulong LastPlayed { get; set; }
+    public DateTime LastPlayed { get; set; }
     
     public List<Token> Tokens { get; set; } = [];
     public SpawnData LastSpawnData { get; set; } = new SpawnData();
