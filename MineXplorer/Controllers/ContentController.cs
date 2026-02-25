@@ -138,4 +138,21 @@ public class ContentController : Controller
         
         return PhysicalFile(imagePath, "image/png; charset=binary");
     }
+    
+    [HttpGet($"/m/u/p")]
+    public async Task<IActionResult> GetProfile([FromHeader(Name = "pr")] string? targetName)
+    {
+        if (HttpContext.Items["Session"] is not Session session)
+        {
+            return Content("");
+        }
+        
+        if (targetName == "_edit") return Content("_edit\nDon't mess with it.\nalways\nall");
+        if (targetName == null) return Content(session.User.GenerateProfile());
+        
+        var user = await DatabaseHelper.GetUser(targetName);
+        if (user != null) return Content(user.GenerateProfile());
+        
+        return Content("\n\nundefined\nundefined");
+    }
 }

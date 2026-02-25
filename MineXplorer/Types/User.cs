@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
 namespace Eyedrop.MineXplorer.Types;
 
@@ -30,5 +31,21 @@ public class User
         using var db = new GameContext();
         db.Update(this);
         await db.SaveChangesAsync();
+    }
+    
+    public string GetTimeSinceLastOnline()
+    {
+        // TODO: implement the whole super complex annoying date thing
+        return "just now";
+    }
+    
+    public string GenerateProfile()
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine(Username);
+        sb.AppendLine(Ghost == null || string.IsNullOrWhiteSpace(Ghost.LastSpeak) ? "" : $"'{Ghost.LastSpeak}'");
+        sb.AppendLine(GetTimeSinceLastOnline());
+        sb.AppendLine(MineXplorerInfo.Version > 29 ? (Tokens.Count == 0 ? "(none)" : string.Join(", ", Tokens.Select(x => x.ID))) : Tokens.Count.ToString());
+        return sb.ToString();
     }
 }
