@@ -13,7 +13,7 @@ public class User
     public ulong LastPlayed { get; set; }
     
     public List<Token> Tokens { get; set; } = [];
-    public string LastSpawnData { get; set; } = "map_welcome 0 0.9 0 0";
+    public SpawnData LastSpawnData { get; set; } = new SpawnData();
     public Ghost Ghost { get; set; }
     
     [NotMapped]
@@ -22,15 +22,6 @@ public class User
         get
         {
             return $"{Username}{Password}";
-        }
-    }
-    
-    [NotMapped]
-    public string LastMap
-    {
-        get
-        {
-            return LastSpawnData.Split(" ")[0];
         }
     }
     

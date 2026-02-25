@@ -30,6 +30,13 @@ internal class GameContext : DbContext
                 v => JsonSerializer.Serialize(v),
                 v => JsonSerializer.Deserialize<List<Token>>(v)!
             );
+        
+        model.Entity<User>()
+            .Property(u => u.LastSpawnData)
+            .HasConversion(
+                v => v.ToString(),
+                v => SpawnData.FromString(v)
+            );
     }
     
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

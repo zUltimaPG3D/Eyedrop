@@ -26,7 +26,7 @@ public class UserController : Controller
             return ResponseHelper.RequestError();
         }
         
-        return Content(session.User.LastSpawnData);
+        return Content(session.User.LastSpawnData.ToString());
     }
     
     [HttpGet("/m/u/g")]
@@ -38,7 +38,7 @@ public class UserController : Controller
         }
         
         session.CreateGhost();
-        session.Ghost?.Scene = session.User.LastSpawnData.Split(" ")[0];
+        session.Ghost?.Scene = session.User.LastSpawnData.Scene;
         session.Ghost?.Position = Vector4Converter.StringToVec(ghostData);
         session.User.LastPlayed = (ulong)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         await session.Ghost?.UpdateAsync()!;
@@ -58,7 +58,7 @@ public class UserController : Controller
         if (!MineXplorerInfo.AllTokens.Contains(token)) return Content("0");
         
         var legitimate = true;
-        var userMap = session.User.LastSpawnData.Split(" ")[0];
+        var userMap = session.User.LastSpawnData.Scene;
         var neededMap = MineXplorerInfo.TokenMap[token];
         if (userMap != neededMap) legitimate = false;
         

@@ -34,7 +34,7 @@ public class ContentController : Controller
         var checkPath = GetMapPath(map);
         
         // validity
-        var wasInMap = session.User.LastMap == map;
+        var wasInMap = session.User.LastSpawnData.Scene == map;
         var requiresTokenForMap = MineXplorerInfo.TokenRequirements.ContainsKey(map);
         var hasMapToken = requiresTokenForMap && session.User.Tokens.Any(x => x.ID == MineXplorerInfo.TokenRequirements[map] && x.Legitimate);
         var mapExists = MineXplorerInfo.AllMaps.Contains(map);
@@ -53,7 +53,8 @@ public class ContentController : Controller
             spawnData = "0 0.9 0 0";
         }
         
-        session.User.LastSpawnData = $"{map} {spawnData}";
+        session.User.LastSpawnData.Scene = map;
+        session.User.LastSpawnData.Position = Vector4Converter.StringToVec(spawnData);
         await session.User.UpdateAsync();
         
         session.ResetMapTimer();
@@ -79,7 +80,7 @@ public class ContentController : Controller
             return Content("");
         }
         
-        var map = session.User.LastSpawnData.Split(" ")[0];
+        var map = session.User.LastSpawnData.Scene;
         var ghosts = await DatabaseHelper.AllGhostsIn(map);
         var split = string.Join('\n', ghosts.Where(x => x.Name != session.User.Username).Select(x => x.ToString()));
         

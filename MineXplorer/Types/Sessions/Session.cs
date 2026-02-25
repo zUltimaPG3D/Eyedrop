@@ -43,7 +43,8 @@ internal class Session
     
     private async Task ChangeMap(string target)
     {
-        User.LastSpawnData = $"{target} 0 0.9 0 0";
+        User.LastSpawnData.Scene = target;
+        User.LastSpawnData.Position = SpawnData.DefaultPosition;
         await User.UpdateAsync();
     }
     
