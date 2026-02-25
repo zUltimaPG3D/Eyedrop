@@ -37,9 +37,6 @@ public class Ghost
         var monthDiff = (now.Year - user.LastPlayed.Year) * 12 + now.Month - user.LastPlayed.Month;
         var weekDiff = (int)((now - user.LastPlayed).TotalDays / 7);
         
-        Console.WriteLine(monthDiff);
-        Console.WriteLine(weekDiff);
-        
         if (monthDiff >= 8 && MineXplorerInfo.Version >= 37) return GhostType.Gone;
         if (weekDiff >= 2) return GhostType.Inactive;
         return GhostType.Classic;
