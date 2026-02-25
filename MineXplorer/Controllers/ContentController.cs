@@ -15,8 +15,7 @@ public class ContentController : Controller
     public async Task<IActionResult> WordList()
     {
         var path = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "wordlist.txt");
-        var data = await System.IO.File.ReadAllBytesAsync(path);
-        return File(data, "text/plain; charset=us-ascii");
+        return PhysicalFile(path, "text/plain; charset=utf-8");
     }
     
     [HttpGet($"/m/m/m")]
