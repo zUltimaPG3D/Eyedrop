@@ -23,6 +23,28 @@ public class Ghost
     public Vector4 Position { get; set; }
     public string? LastSpeak { get; set; }
     
+    public async Task<GhostType> GetGhostType()
+    {
+        if (Type == GhostType.It && MineXplorerInfo.Version < 29) return GhostType.Classic;
+        if (Type != GhostType.Classic) return Type;
+        
+        using var db = new GameContext();
+        var user = await db.Users.FirstOrDefaultAsync(x => x.Username == Name); 
+        
+        if (user == null) return Type;
+        var now = DateTime.UtcNow;
+        
+        var monthDiff = (now.Year - user.LastPlayed.Year) * 12 + now.Month - user.LastPlayed.Month;
+        var weekDiff = (int)((now - user.LastPlayed).TotalDays / 7);
+        
+        Console.WriteLine(monthDiff);
+        Console.WriteLine(weekDiff);
+        
+        if (monthDiff >= 8 && MineXplorerInfo.Version >= 37) return GhostType.Gone;
+        if (weekDiff >= 2) return GhostType.Inactive;
+        return GhostType.Classic;
+    }
+    
     public async Task UpdateAsync()
     {
         using var db = new GameContext();
@@ -36,8 +58,9 @@ public class Ghost
         await db.SaveChangesAsync();
     }
     
-    public override string ToString()
+    public async Task<string> AsString()
     {
-        return $"{Vector4Converter.VecToString(Position)} {Type} {Name} {LastSpeak?.Replace(" ", "@")}";
+        var type = await GetGhostType();
+        return $"{Vector4Converter.VecToString(Position)} {type} {Name} {LastSpeak?.Replace(" ", "@")}";
     }
 }
