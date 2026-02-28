@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace Eyedrop.MineXplorer.Types;
 
@@ -39,11 +40,17 @@ public class User
         return "just now";
     }
     
-    public string GenerateProfile()
+    public async Task<string> GenerateProfile()
     {
+        Ghost? ghost = null;
+        using (var db = new GameContext())
+        {
+            ghost = await db.Ghosts.FirstOrDefaultAsync(x => x.Name == Username);
+        }
+        
         var sb = new StringBuilder();
         sb.AppendLine(Username);
-        sb.AppendLine(Ghost == null || string.IsNullOrWhiteSpace(Ghost.LastSpeak) ? "" : $"'{Ghost.LastSpeak}'");
+        sb.AppendLine((ghost == null || string.IsNullOrWhiteSpace(ghost.LastSpeak)) ? "" : $"'{ghost.LastSpeak}'");
         sb.AppendLine(GetTimeSinceLastOnline());
         sb.AppendLine(MineXplorerInfo.Version > 29 ? (Tokens.Count == 0 ? "(none)" : string.Join(", ", Tokens.Select(x => x.ID))) : Tokens.Count.ToString());
         return sb.ToString();

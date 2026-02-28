@@ -14,8 +14,14 @@ public class ContentController : Controller
     [HttpGet($"/m/m/w")]
     public async Task<IActionResult> WordList()
     {
-        var path = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "wordlist.txt");
-        return PhysicalFile(path, "text/plain; charset=utf-8");
+        return PhysicalFile(SpeakManager.WordlistPath, "text/plain; charset=utf-8");
+    }
+    
+    [HttpGet($"/m/m/s")]
+    public async Task<IActionResult> GetLastSpeak()
+    {
+        var lines = (await System.IO.File.ReadAllTextAsync(SpeakManager.SpeakPath)).TrimEnd();
+        return File(Encoding.UTF8.GetBytes(lines), "text/plain; charset=utf-8");
     }
     
     [HttpGet($"/m/m/m")]
@@ -148,10 +154,10 @@ public class ContentController : Controller
         }
         
         if (targetName == "_edit") return Content("_edit\nDon't mess with it.\nalways\nall");
-        if (targetName == null) return Content(session.User.GenerateProfile());
+        if (targetName == null) return Content(await session.User.GenerateProfile());
         
         var user = await DatabaseHelper.GetUser(targetName);
-        if (user != null) return Content(user.GenerateProfile());
+        if (user != null) return Content(await user.GenerateProfile());
         
         return Content("\n\nundefined\nundefined");
     }

@@ -67,4 +67,29 @@ public class UserController : Controller
         
         return Content("1");
     }
+    
+    [HttpGet("/m/o/s")]
+    public async Task<IActionResult> SendSpeak([FromHeader(Name = "sp")] string speakIndices)
+    {
+        if (HttpContext.Items["Session"] is not Session session)
+        {
+            return ResponseHelper.RequestError();
+        }
+        
+        var indices = speakIndices.Split(" ").Select(x => Convert.ToInt32(x)).ToArray();
+        if (indices.Length < 1 || indices.Length > 26) return Content("");
+        
+        var converted = SpeakManager.ConvertIndicesToString(indices);
+        
+        SpeakManager.AddLine($"{session.User.Username}: {converted}");
+        if (SpeakManager.LineAmount() > 25)
+        {
+            SpeakManager.RemoveTopLine();
+        }
+        
+        session.Ghost?.LastSpeak = converted;
+        session.Ghost?.UpdateAsync();
+        
+        return Content("1");
+    }
 }
