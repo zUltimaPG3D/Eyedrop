@@ -15,7 +15,7 @@ internal static class MineXplorerInfo
     public static readonly List<string> AllMaps = [
         "map_welcome", "map_welcome_beach", "map_house", "map_house_jukeroom",
         "map_hell", "map_void", "map_void_white", "map_parkour", "map_herobrine",
-        "map_maze", "map_cave_pond", "map_ballpit", "map_ballpit_cave",
+        "map_maze", "map_cave_pond", "map_ballpit", "map_ballpit_cave", "map_cave",
         "map_ballpit_alt", "map_vip", "map_corporation_part1", "map_corporation_part2",
         "map_corporation_part3", "map_corporation_part4", "map_corporation_part5",
         "map_corporation_part6", "map_corporation_part7", "map_corporation_part8",
