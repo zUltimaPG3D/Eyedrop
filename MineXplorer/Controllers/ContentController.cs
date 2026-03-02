@@ -161,4 +161,18 @@ public class ContentController : Controller
         
         return Content("\n\nundefined\nundefined");
     }
+    
+    [HttpGet($"/m/m/t")]
+    public async Task<IActionResult> GetVideo([FromHeader(Name = "ty")] string? videoType)
+    {
+        var basePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "Videos");
+        var finalVideoType = string.IsNullOrWhiteSpace(videoType) ? "theater" : Directory.Exists(Path.Combine(basePath, videoType)) ? videoType : "theater";
+        if (finalVideoType == "theater" && !MineXplorerInfo.TheaterScreenOn) return Content("");
+        
+        var finalPath = Path.Combine(basePath, finalVideoType);
+        
+        var files = Directory.GetFiles(finalPath);
+        var random = files[RandomNumberGenerator.GetInt32(files.Length)];
+        return PhysicalFile(random, "video/mp4; charset=binary");
+    }
 }

@@ -105,4 +105,6 @@ internal static class MineXplorerInfo
         {"map_museum_part6", "museum"},
         {"map_museum_part7", "museum"},
     };
+    
+    public static bool TheaterScreenOn = true;
 }
