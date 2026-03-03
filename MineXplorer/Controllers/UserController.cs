@@ -92,4 +92,30 @@ public class UserController : Controller
         
         return Content("1");
     }
+    
+    [HttpGet("/m/o/c")]
+    public async Task<IActionResult> ExecuteCustomPacket([FromHeader(Name = "pa")] string packetName, [FromHeader(Name = "va")] string? variables)
+    {
+        if (HttpContext.Items["Session"] is not Session session)
+        {
+            return ResponseHelper.RequestError();
+        }
+        
+        switch (packetName)
+        {
+            case "ts": // Toggle Screen
+                if (session.User.LastSpawnData.Scene != "map_theater_employee") return ResponseHelper.RequestError();
+                MineXplorerInfo.TheaterScreenOn = !MineXplorerInfo.TheaterScreenOn;
+                // TODO: webhook message
+                break;
+            case "cp": // Complete Parkour
+                if (session.User.LastSpawnData.Scene != "map_parkour") return ResponseHelper.RequestError();
+                // TODO: webhook message
+                break;
+            default:
+                return ResponseHelper.RequestError();
+        }
+        
+        return Content("1");
+    }
 }
