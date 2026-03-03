@@ -41,9 +41,9 @@ public class ContentController : Controller
         
         // validity
         var wasInMap = session.User.LastSpawnData.Scene == map;
-        var requiresTokenForMap = MineXplorerInfo.TokenRequirements.ContainsKey(map);
+        var mapExists = MineXplorerInfo.TokenRequirements.ContainsKey(map);
+        var requiresTokenForMap = mapExists && MineXplorerInfo.TokenRequirements[map] != "";
         var hasMapToken = requiresTokenForMap && session.User.Tokens.Any(x => x.ID == MineXplorerInfo.TokenRequirements[map] && x.Legitimate);
-        var mapExists = MineXplorerInfo.AllMaps.Contains(map);
         
         var invalid = ((requiresTokenForMap && !hasMapToken) || !mapExists) && !wasInMap;
         
