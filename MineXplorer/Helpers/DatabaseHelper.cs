@@ -48,7 +48,11 @@ internal partial class DatabaseHelper
     public static async Task<List<Ghost>> AllGhostsIn(string scene)
     {
         using var db = new GameContext();
-        return await db.Ghosts.Where(x => x.Scene == scene).ToListAsync();
+        var ghosts = await db.Ghosts.ToListAsync();
+        
+        var sceneIsMixed = MineXplorerInfo.GhostMixing.Any(x => x.Contains(scene));
+        
+        return [.. ghosts.Where(x => sceneIsMixed ? MineXplorerInfo.GhostMixing.First(y => y.Contains(scene)).Contains(x.Scene) : x.Scene == scene)];
     }
 
     [GeneratedRegex(@"^[a-z]+$")]

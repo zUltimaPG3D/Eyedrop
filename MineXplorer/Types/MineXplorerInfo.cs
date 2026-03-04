@@ -12,6 +12,12 @@ internal static class MineXplorerInfo
         "underground_part2", "corporation", "basement"
     ];
     
+    public static readonly List<List<string>> GhostMixing = [
+        ["map_welcome", "map_house", "map_welcome_beach"],
+        ["map_cave", "map_cave_pond"],
+        ["map_ballpit", "map_ballpit_cave"]
+    ];
+    
     public static readonly Dictionary<string, string> TokenMap = new()
     {
         {"cave", "map_welcome"},
