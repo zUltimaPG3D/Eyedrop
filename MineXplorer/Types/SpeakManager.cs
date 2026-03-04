@@ -33,7 +33,7 @@ public static class SpeakManager
     
     public static int LineAmount()
     {
-        return File.ReadAllLines(SpeakPath).Length;
+        return File.ReadAllLines(SpeakPath).Length - 1;
     }
     
     public static string ConvertIndicesToString(int[] indices)
