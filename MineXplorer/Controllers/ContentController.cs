@@ -172,7 +172,7 @@ public class ContentController : Controller
     {
         var basePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "Videos");
         var finalVideoType = string.IsNullOrWhiteSpace(videoType) ? "theater" : Directory.Exists(Path.Combine(basePath, videoType)) ? videoType : "theater";
-        if (finalVideoType == "theater" && !MineXplorerInfo.TheaterScreenOn) return Content("");
+        if (finalVideoType == "theater" && !MineXplorerInfo.TheaterScreenOn) return PhysicalFile(Path.Combine(basePath, "empty.mp4"), "video/mp4; charset=binary");
         
         var finalPath = Path.Combine(basePath, finalVideoType);
         
