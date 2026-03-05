@@ -92,6 +92,8 @@ public class ContentController : Controller
         }
         
         var map = session.User.LastSpawnData.Scene;
+        if (map == "map_void") return Content("");
+        
         var ghosts = await DatabaseHelper.AllGhostsIn(map);
         var query = ghosts.Where(x => x.Name != session.User.Username).Select(async x => await x.AsString());
         
