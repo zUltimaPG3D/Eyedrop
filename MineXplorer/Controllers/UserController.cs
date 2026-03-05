@@ -61,6 +61,10 @@ public class UserController : Controller
         var userMap = session.User.LastSpawnData.Scene;
         var neededMap = MineXplorerInfo.TokenMap[token];
         if (userMap != neededMap) legitimate = false;
+        if (legitimate)
+        {
+            MineXplorerInfo.SendWebhook($"{session.User.Username} got a token: `{token}`");
+        }
         
         session.User.Tokens.Add(new Token(token, legitimate));
         await session.User.UpdateAsync();
@@ -82,6 +86,7 @@ public class UserController : Controller
         var converted = SpeakManager.ConvertIndicesToString(indices);
         
         SpeakManager.AddLine($"{session.User.Username}: {converted}");
+        MineXplorerInfo.SendWebhook($"`{session.User.Username}: {converted}`");
         if (SpeakManager.LineAmount() > 25)
         {
             SpeakManager.RemoveTopLine();
@@ -106,11 +111,11 @@ public class UserController : Controller
             case "ts": // Toggle Screen
                 if (session.User.LastSpawnData.Scene != "map_theater_employee") return ResponseHelper.RequestError();
                 MineXplorerInfo.TheaterScreenOn = !MineXplorerInfo.TheaterScreenOn;
-                // TODO: webhook message
+                MineXplorerInfo.SendWebhook($"{session.User.Username} turned the screen {(MineXplorerInfo.TheaterScreenOn ? "on" : "off")}.");
                 break;
             case "cp": // Complete Parkour
                 if (session.User.LastSpawnData.Scene != "map_parkour") return ResponseHelper.RequestError();
-                // TODO: webhook message
+                MineXplorerInfo.SendWebhook($"{session.User.Username} completed the parkour.");
                 break;
             default:
                 return ResponseHelper.RequestError();

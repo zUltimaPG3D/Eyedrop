@@ -6,6 +6,8 @@ internal static class MineXplorerInfo
     public const int Version = 37;
     public const bool PlayingAllowed = true;
     
+    public const string WebhookURL = "";
+    
     public static readonly List<string> AllTokens = [
         "cave", "ballpit", "station", "station_disco", "employee",
         "vip", "theater", "museum", "museumexit", "underground_part1",
@@ -104,4 +106,9 @@ internal static class MineXplorerInfo
     };
     
     public static bool TheaterScreenOn = true;
+    
+    public static void SendWebhook(string Content)
+    {
+        _ = WebhookManager.SendText(WebhookURL, Content);
+    }
 }

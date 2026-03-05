@@ -8,6 +8,7 @@ internal class Session
     public string Username;
     public User User;
     public Ghost? Ghost;
+    public bool Authorized;
     
     private readonly System.Timers.Timer InactivityTimer;
     private System.Timers.Timer MapChangeTimer;
@@ -52,6 +53,7 @@ internal class Session
     {
         Console.WriteLine($"{Username} is inactive!");
         SessionManager.RemoveSession(this);
+        MineXplorerInfo.SendWebhook($"see you soon, {User.Username}.");
     }
     
     public void CreateGhost()

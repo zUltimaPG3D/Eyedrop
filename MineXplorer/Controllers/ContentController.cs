@@ -73,6 +73,11 @@ public class ContentController : Controller
             session.DoMapTimer("map_hell");
         }
         
+        if (map == "map_hell")
+        {
+            MineXplorerInfo.SendWebhook($"you deserve it, {session.User.Username}.");
+        }
+        
         var finalPath = GetMapPath(map);
         var data = await System.IO.File.ReadAllBytesAsync(finalPath);
         return File(data, "application/octet-stream; charset=binary");

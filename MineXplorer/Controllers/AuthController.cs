@@ -49,6 +49,12 @@ public class AuthController : Controller
         }
         
         var session = await SessionManager.CreateOrGetSession(me, false);
+        
+        if (session != null && !session.Authorized)
+        {
+            MineXplorerInfo.SendWebhook($"welcome, {session.User.Username}.");
+        }
+        
         return Content(session == null ? "" : "1");
     }
 }
