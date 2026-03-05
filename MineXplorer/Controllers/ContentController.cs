@@ -34,7 +34,7 @@ public class ContentController : Controller
 
         static string GetMapPath(string name)
         {
-            return Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "Maps", "2022", name);
+            return Path.Combine(MineXplorerInfo.ContentPath, "Maps", "2022", name);
         }
         
         var checkPath = GetMapPath(map);
@@ -109,21 +109,21 @@ public class ContentController : Controller
     [HttpGet($"/m/n/a")]
     public async Task<IActionResult> GetAnnouncement()
     {
-        var path = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "announcement.txt");
+        var path = Path.Combine(MineXplorerInfo.ContentPath, "announcement.txt");
         return PhysicalFile(path, "text/plain; charset=utf-8");
     }
     
     [HttpGet($"/m/n/n")]
     public async Task<IActionResult> GetNews()
     {
-        var path = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "news.txt");
+        var path = Path.Combine(MineXplorerInfo.ContentPath, "news.txt");
         return PhysicalFile(path, "text/plain; charset=utf-8");
     }
     
     [HttpGet($"/m/m/i")]
     public async Task<IActionResult> GetImage()
     {
-        var path = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "Images");
+        var path = Path.Combine(MineXplorerInfo.ContentPath, "Images");
         var files = Directory.GetFiles(path);
         var random = files[RandomNumberGenerator.GetInt32(files.Length)];
         return PhysicalFile(random, "image/png; charset=binary");
@@ -132,7 +132,7 @@ public class ContentController : Controller
     [HttpGet($"/m/m/a")]
     public async Task<IActionResult> GetAd([FromHeader] string id)
     {
-        var listPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "adlist.txt");
+        var listPath = Path.Combine(MineXplorerInfo.ContentPath, "adlist.txt");
         var listData = (await System.IO.File.ReadAllLinesAsync(listPath)).Where(x => !string.IsNullOrWhiteSpace(x));
         
         if (id == "0")
@@ -144,7 +144,7 @@ public class ContentController : Controller
         var isValid = listData.Any(x => x == id);
         if (!isValid) return ResponseHelper.RequestError();
         
-        var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "Ads", $"{id}.png");
+        var imagePath = Path.Combine(MineXplorerInfo.ContentPath, "Ads", $"{id}.png");
         if (!System.IO.File.Exists(imagePath)) return ResponseHelper.RequestError();
         
         return PhysicalFile(imagePath, "image/png; charset=binary");
@@ -170,7 +170,7 @@ public class ContentController : Controller
     [HttpGet($"/m/m/t")]
     public async Task<IActionResult> GetVideo([FromHeader(Name = "ty")] string? videoType)
     {
-        var basePath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "Videos");
+        var basePath = Path.Combine(MineXplorerInfo.ContentPath, "Videos");
         var finalVideoType = string.IsNullOrWhiteSpace(videoType) ? "theater" : Directory.Exists(Path.Combine(basePath, videoType)) ? videoType : "theater";
         if (finalVideoType == "theater" && !MineXplorerInfo.TheaterScreenOn) return PhysicalFile(Path.Combine(basePath, "empty.mp4"), "video/mp4; charset=binary");
         

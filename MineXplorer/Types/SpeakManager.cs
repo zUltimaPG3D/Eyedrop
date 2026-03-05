@@ -15,7 +15,7 @@ public static class SpeakManager
     {
         get
         {
-            return Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content", "wordlist.txt");
+            return Path.Combine(MineXplorerInfo.ContentPath, "wordlist.txt");
         }
     }
     

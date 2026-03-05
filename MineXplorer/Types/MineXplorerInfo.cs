@@ -2,6 +2,8 @@ namespace Eyedrop.MineXplorer.Types;
 
 internal static class MineXplorerInfo
 {
+    public static readonly string ContentPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Content");
+
     public const string DataPath = "mexp";
     public const int Version = 37;
     public const bool PlayingAllowed = true;
